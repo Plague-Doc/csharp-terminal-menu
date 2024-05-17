@@ -13,32 +13,21 @@ public class CounterScene
         SceneOptions =
         [
             new() { Message = "Increment", Execute = () => Increment() },
-            new() { Message = "Back to Main Menu", Execute = () => OpenMainScene() }
+            new() { Message = "Back to Main Menu", Execute = () => { _ = new MainScene(); } }
         ];
 
         SceneMenu = new()
         {
-            PreMenuText = $"Count: {Count}\n",
             Options = SceneOptions,
-            Alignment = Orientation.Vertical
+            PreMenuText = $"Count: {Count}\n"
         };
-    }
 
-    public void DrawScene()
-    {
-        SceneMenu.PreMenuText = $"Count: {Count}\n";
         SceneMenu.DrawMenu();
     }
 
     private void Increment()
     {
         Count++;
-        DrawScene();
-    }
-
-    private void OpenMainScene()
-    {
-        MainScene mainScene = new();
-        mainScene.DrawScene();
+        SceneMenu.PreMenuText = $"Count: {Count}\n";
     }
 }

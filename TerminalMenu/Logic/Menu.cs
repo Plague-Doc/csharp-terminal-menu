@@ -2,30 +2,39 @@
 
 public class Menu
 {
+    public required List<Option> Options { get; set; }
+    public Align Alignment { get; set; } = Align.Vertically;
+    public Action? PreMenuExecute { get; set; }
+    public Action? PostMenuExecute { get; set; }
     public string? PreMenuText { get; set; }
     public string? PostMenuText { get; set; }
-    public required List<Option> Options { get; set; }
-    public required Orientation Alignment { get; set; }
-    private int Index { get; set; } = 0;
+    public int Index { get; set; } = 0;
 
     public void DrawMenu()
     {
         do
         {
             Console.Clear();
+            Console.CursorVisible = false;
 
+            PreMenuExecute?.Invoke();
             if (!string.IsNullOrEmpty(PreMenuText)) { Console.WriteLine(PreMenuText); }
 
-            if (Alignment == Orientation.Vertical) { DrawMenuVertical(); }
+            if (Alignment == Align.Vertically) { DrawMenuVertical(); }
             else { DrawMenuHorizontal(); }
 
+            PostMenuExecute?.Invoke();
             if (!string.IsNullOrEmpty(PostMenuText)) { Console.WriteLine(PostMenuText); }
 
         }
         while (GetUserInput().Key != ConsoleKey.Enter);
 
         Options[Index].Execute();
+
+        DrawMenu();
     }
+
+    public void ResetSelectPosition() { Index = 0; }
 
     private void DrawMenuVertical()
     {
@@ -55,12 +64,12 @@ public class Menu
             {
                 Console.ForegroundColor = ConsoleColor.Black;
                 Console.BackgroundColor = ConsoleColor.White;
-                Console.Write($">| {Options[i].Message}| <");
+                Console.Write($">| {Options[i].Message} | <");
                 Console.ResetColor();
             }
             else
             {
-                Console.Write($"| {Options[i].Message}| ");
+                Console.Write($"| {Options[i].Message} | ");
             }
         }
 
@@ -80,25 +89,25 @@ public class Menu
                 return keyPressed;
             }
             else if ((keyPressed.Key == ConsoleKey.UpArrow || keyPressed.Key == ConsoleKey.W) &&
-                Alignment == Orientation.Vertical && Index > 0)
+                Alignment == Align.Vertically && Index > 0)
             {
                 Index--;
                 return keyPressed;
             }
             else if ((keyPressed.Key == ConsoleKey.DownArrow || keyPressed.Key == ConsoleKey.S) &&
-                Alignment == Orientation.Vertical && Index < Options.Count - 1)
+                Alignment == Align.Vertically && Index < Options.Count - 1)
             {
                 Index++;
                 return keyPressed;
             }
             else if ((keyPressed.Key == ConsoleKey.LeftArrow || keyPressed.Key == ConsoleKey.A) &&
-                Alignment == Orientation.Horizontal && Index > 0)
+                Alignment == Align.Horizontally && Index > 0)
             {
                 Index--;
                 return keyPressed;
             }
             else if ((keyPressed.Key == ConsoleKey.RightArrow || keyPressed.Key == ConsoleKey.D) &&
-                Alignment == Orientation.Horizontal && Index < Options.Count - 1)
+                Alignment == Align.Horizontally && Index < Options.Count - 1)
             {
                 Index++;
                 return keyPressed;
@@ -113,4 +122,4 @@ public class Option
     public required Action Execute { get; set; }
 }
 
-public enum Orientation { Vertical, Horizontal }
+public enum Align { Vertically, Horizontally }

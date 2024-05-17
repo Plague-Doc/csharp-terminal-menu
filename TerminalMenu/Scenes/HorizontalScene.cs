@@ -11,33 +11,25 @@ public class HorizontalScene
     {
         SceneOptions =
         [
-            new() { Message = "First!", Execute = () => ChangeSelected("\n First option selected") },
-            new() { Message = "Second!", Execute = () => ChangeSelected("\n Second option selected") },
-            new() { Message = "Third!", Execute = () => ChangeSelected("\n Third option selected") },
-            new() { Message = "Back to Main Menu", Execute = () => OpenMainScene() }
+            new() { Message = "First!", Execute = () => ChangeSelected("First option selected!") },
+            new() { Message = "Second!", Execute = () => ChangeSelected("Second option selected!") },
+            new() { Message = "Third!", Execute = () => ChangeSelected("Third option selected!") },
+            new() { Message = "Back to Main Menu", Execute = () => { _ = new MainScene(); } }
         ];
 
         SceneMenu = new()
         {
-            PreMenuText = "Here use the LEFT and RIGHT arrow keys to navigate\n",
             Options = SceneOptions,
-            Alignment = Orientation.Horizontal
+            Alignment = Align.Horizontally,
+            PreMenuText = "~ Horizontal Menu Demo ~\n",
+            PostMenuText = "\n- Here use the LEFT and RIGHT arrow keys to navigate\n"
         };
-    }
-    public void DrawScene()
-    {
+
         SceneMenu.DrawMenu();
     }
 
     private void ChangeSelected(string selected)
     {
-        SceneMenu.PostMenuText = selected;
-        DrawScene();
-    }
-
-    private void OpenMainScene()
-    {
-        MainScene mainScene = new();
-        mainScene.DrawScene();
+        SceneMenu.PostMenuText = $"\n- Here use the LEFT and RIGHT arrow keys to navigate\n\n|>> {selected}";
     }
 }
