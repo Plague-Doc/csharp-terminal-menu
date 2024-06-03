@@ -1,3 +1,4 @@
 # TerminalMenu
+
 A console application menu system that can be naivgated with directional keyboard inputs written in C#.  
-The menu logic itself is all inside the `Menu.cs` file, everything else is just examples of how to use it.
+The menu logic itself is all inside the `Logic/Menu.cs` file, everything else are just examples on how to use it.
